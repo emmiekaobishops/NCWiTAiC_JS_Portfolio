@@ -38,7 +38,7 @@ function move_outcome(){
         return clearInterval(interval);
     }
     else{
-        move_snake(squares)
+        move_snek(squares)
     }
 }
 
@@ -50,10 +50,24 @@ function move_snek(squares){
     squares[current_snek[0]].classList.add("snake");
 }
 
+function checkForHits(squares) {
+    if(
+        (current_snek[0] + width >= width * width && direction === width) ||
+        (current_snek[0] % width === width - 1 && direction ===1) ||
+        (current_snek[0] % width === 0 && direction === -1) ||
+        (current_snek[0] - width <= 0 && direction === -width) ||
+        squares[current_snek[0] + direction].classList.contains("snake")
+    ){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
 function main(){
     document.addEventListener("DOMContentLoaded", function() {
         document.addEventListener("keyup", control);
-        init_snek();
         playAgain.addEventListener("click", replay);
     });
 
