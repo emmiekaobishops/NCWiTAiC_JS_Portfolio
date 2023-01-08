@@ -7,13 +7,14 @@
     <script defer type="text/javascript" src="./checkerboard.js"></script>
     <link href="style.css" rel="stylesheet">
     <!-- ALL FOR KEYPRESS -->
-    <!-- <script defer type="text/javascript">
+    <script defer type="text/javascript">
       function onMouseClick(){
         alert("Click :O");
       }
 
       function onKeyPress(e){
         // alert(e.key + " key pressed!");
+        console.log('asdfasdf');
         var kp = e.key;
         if(kp == "w" || kp == "W"){
           alert("w key");
@@ -27,7 +28,7 @@
         else if(kp == "d" || kp == "D"){
           alert("d key");
         }
-      } -->
+      }
 
     </script>
   </head>
@@ -39,7 +40,8 @@
 
   <script type = "text/javascript">
     var myCanvas = document.getElementById("mainCanvas");
-
+    myCanvas.addEventListener("keydown", onKeyPress)
+    // event listeners --> call move function a lot to see if it checks for keystroke
 
 
   </script>

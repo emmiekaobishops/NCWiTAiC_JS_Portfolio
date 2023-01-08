@@ -14,26 +14,26 @@ function draw_board(){
     let x_val = 0;
     let y_val = 0;
 
-    var sq_array = [];
+    var sq_array = new Array(rows);
 
     for (let i = 0; i < rows; i++){
         x_val = 30 * i;
         let color = "";
-
-        for (let j = 0; j < columns; j++){
-            if (j % 2 == 0 && i % 2 == 0){
+        sq_array[i] = new Array(columns);
+        for (let j = 0; j < columns; j++) {
+            if ((i+j) % 2 == 0) {
                 color = "#93B7F2";
+                index = 0;
             }
-            else{
+            else {
                 color = "#A5C4F7";
-                if(j % 2 != 0 && i % 2 != 0){
-                    color = "#93B7F2";
-                }
+                index = 1;
             }
             y_val = 30 * j;
-            sq = square(x_val, y_val, sq_width, sq_height, color, sq_array);
-            sq_array.push(sq);
+            square(x_val, y_val, sq_width, sq_height, color, sq_array);
+            sq_array[i][j] = index;
         }
     }
+    console.log(sq_array)
     return sq_array
 }
