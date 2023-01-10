@@ -1,12 +1,13 @@
-let c = document.getElementById("mainCanvas");
-let ctx = c.getContext("2d");
-let width = 30;
-let current_index = 0;
-let speed = 0.8;
-let interval_time = 0;
-let interval = 0;
+var c = document.getElementById("mainCanvas");
+var ctx = c.getContext("2d");
+var width = 30;
+var current_index = 0;
+var speed = 0.8;
+var interval_time = 0;
+var interval = 0;
 // [x direction, y direction, x coord, y coord]
-let current_snek = [[1, 0, 10, 10], [1, 0, 11, 10]];
+var current_snek = [[1, 0, 10, 10], [1, 0, 11, 10]]; //PROBLEM HERE
+myCanvas.addEventListener("keydown", onKeyPress);
 
 function random_apple(){
     xRand = Math.floor(Math.random() * 20)
@@ -16,20 +17,20 @@ function random_apple(){
     return [xRand, yRand]
 }
 
-function init_snek(){
+function init_snek(current_snek){
     sq_array = draw_board();
     [app_x, app_y] = random_apple();
     sq_array[app_x][app_y] += 2;
     ctx.fillStyle = "blue";
     ctx.fillRect(current_snek[0][2] * 30, current_snek[0][3] * 30, 30, 30);
     ctx.fillRect(current_snek[1][2] * 30, current_snek[1][3] * 30, 30, 30);
-    return [sq_array, current_snek];
+    return sq_array;
 }
 
 function move_snek(sq_array){
     console.log("move_snek");
-    myCanvas.addEventListener("keydown", onKeyPress)
     let col_num = current_snek.length - 1
+    // console.log(current_snek[0][2]);
     if(sq_array[current_snek[0][2]][current_snek[0][3]] == 0){
         current_snek.shift()
         ctx.fillStyle = "#93B7F2"
@@ -42,7 +43,7 @@ function move_snek(sq_array){
     }
     current_snek.push([current_snek[col_num - 2][0], current_snek[col_num - 2][1], current_snek[col_num - 2][2] + current_snek[col_num - 2][0], current_snek[col_num - 2][3] + current_snek[col_num - 2][1]])
     ctx.fillStyle = "blue"
-    ctx.fillRect(current_snek[col_num][2] * 30, current_snek[col_num][3] * 30, 30, 30);   
+    ctx.fillRect(current_snek[col_num - 1][2] * 30, current_snek[col_num - 1][3] * 30, 30, 30);   
 }
 
 function onKeyPress(e){
@@ -85,8 +86,8 @@ function onKeyPress(e){
 // }
 
 function main(){
-    [sq_array] = init_snek();
-    setInterval(move_snek(current_snek, sq_array), 20);
+    sq_array = init_snek(current_snek);
+    setInterval(move_snek(sq_array), 20);
     
 }
 main();

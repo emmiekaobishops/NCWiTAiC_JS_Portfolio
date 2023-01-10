@@ -34,6 +34,5 @@ function draw_board(){
             sq_array[i][j] = index;
         }
     }
-    console.log(sq_array)
     return sq_array
 }
