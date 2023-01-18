@@ -1,13 +1,16 @@
 var c = document.getElementById("mainCanvas");
 var ctx = c.getContext("2d");
 var width = 30;
+var height = 30;
 var current_index = 0;
 var speed = 0.8;
 var interval_time = 0;
 var interval = 0;
+var sq_array;
+var should_run;
+var snake_run;
 // [x direction, y direction, x coord, y coord]
-var current_snek = [[1, 0, 10, 10], [1, 0, 11, 10]]; //PROBLEM HERE
-myCanvas.addEventListener("keydown", onKeyPress);
+var current_snek = [[1, 0, 10, 10], [1, 0, 11, 10]];
 
 function random_apple(){
     xRand = Math.floor(Math.random() * 20)
@@ -27,67 +30,85 @@ function init_snek(current_snek){
     return sq_array;
 }
 
-function move_snek(sq_array){
+function move_snek(){
     console.log("move_snek");
-    let col_num = current_snek.length - 1
+    let col_num = current_snek.length
     // console.log(current_snek[0][2]);
     if(sq_array[current_snek[0][2]][current_snek[0][3]] == 0){
-        current_snek.shift()
-        ctx.fillStyle = "#93B7F2"
+        ctx.fillStyle = "#93B7F2";
         ctx.fillRect(current_snek[0][2] * 30, current_snek[0][3] * 30, 30, 30);
+        current_snek.shift();
+        console.log(current_snek);
     }
     else if(sq_array[current_snek[0][2]][current_snek[0][3]] == 1){
-        current_snek.shift()
-        ctx.fillStyle = "#A5C4F7"
+        ctx.fillStyle = "#A5C4F7";
         ctx.fillRect(current_snek[0][2] * 30, current_snek[0][3] * 30, 30, 30);
+        current_snek.shift();
+        console.log(current_snek);
     }
-    current_snek.push([current_snek[col_num - 2][0], current_snek[col_num - 2][1], current_snek[col_num - 2][2] + current_snek[col_num - 2][0], current_snek[col_num - 2][3] + current_snek[col_num - 2][1]])
-    ctx.fillStyle = "blue"
-    ctx.fillRect(current_snek[col_num - 1][2] * 30, current_snek[col_num - 1][3] * 30, 30, 30);   
+    current_snek.push([current_snek[col_num - 2][0], current_snek[col_num - 2][1], current_snek[col_num - 2][2] + current_snek[col_num - 2][0], current_snek[col_num - 2][3] + current_snek[col_num - 2][1]]);
+    ctx.fillStyle = "blue";
+    ctx.fillRect(current_snek[col_num - 1][2] * 30, current_snek[col_num - 1][3] * 30, 30, 30);
+    should_run = check_for_hits();
+    console.log(should_run);
+    if(should_run){
+        clearInterval(snake_run);
+    }
 }
 
 function onKeyPress(e){
-    let col_num = current_snek.length - 1
+    let col_num = current_snek.length;
     var kp = e.key;
+    console.log(kp);
     // change the LAST row of the array based on key pressed
     if(kp == "ArrowRight"){
-        current_snek[col_num][0] = 1;
-        current_snek[col_num][1] = 0;
+        if (current_snek[col_num][0] != -1 && current_snek[col_num][1] != 0){
+            current_snek[col_num][0] = 1;
+            current_snek[col_num][1] = 0;
+        }
     }
     else if(kp == "ArrowLeft"){
-        current_snek[col_num][0] = -1;
-        current_snek[col_num][1] = 0;
+        if (current_snek[col_num][0] != 1 && current_snek[col_num][1] != 0){
+            current_snek[col_num][0] = -1;
+            current_snek[col_num][1] = 0;
+        }
     }
     else if(kp == "ArrowUp"){
-        current_snek[col_num][0] = 0;
-        current_snek[col_num][1] = -1;
+        if (current_snek[col_num][0] != 0 && current_snek[col_num][1] != 1){
+            current_snek[col_num][0] = 0;
+            current_snek[col_num][1] = -1;
+        }
     }
     else if(kp == "ArrowDown"){
-        current_snek[col_num][0] = 0;
-        current_snek[col_num][1] = 1;
+        if (current_snek[col_num][0] != 0 && current_snek[col_num][1] != -1){
+            current_snek[col_num][0] = 0;
+            current_snek[col_num][1] = 1;
+        }
     }
     return current_snek;
 }
-// DISREGARD
-// function check_for_hits(squares) {
-//     if(
-//         (current_snek[0] + width >= width * width && direction === width) ||
-//         (current_snek[0] % width === width - 1 && direction ===1) ||
-//         (current_snek[0] % width === 0 && direction === -1) ||
-//         (current_snek[0] - width <= 0 && direction === -width) ||
-//         squares[current_snek[0] + direction].classList.contains("snake")
-//     )
-//     {
-//         return true;
-//     }
-//     else{
-//         return false;
-//     }
-// }
+
+function check_for_hits() {
+    if(
+        (current_snek[0] + current_snek[2] > width && current_snek[0] === 1) ||
+        (current_snek[0] + current_snek[2] < 0 && current_snek[0] === -1) ||
+        (current_snek[1] + current_snek[3] > height && current_snek[1] === 1) ||
+        (current_snek[1] + current_snek[3] < 0 && current_snek[1] === -1)
+        // squares[current_snek[0] + direction].classList.contains("snake")
+    )
+    {
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
 
 function main(){
+    myCanvas.addEventListener("keydown", onKeyPress);
     sq_array = init_snek(current_snek);
-    setInterval(move_snek(sq_array), 20);
+    snake_run = setInterval(move_snek, 200);
     
 }
 main();
