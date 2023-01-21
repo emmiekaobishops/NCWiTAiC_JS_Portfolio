@@ -43,13 +43,10 @@ function create_snek_array(){
 function random_apple(){
     xRand = Math.floor(Math.random() * 20);
     yRand = Math.floor(Math.random() * 20);
-    var cnt = 0;
     while(snek_array[yRand][xRand] == 1){
-        cnt += 1;
         xRand = Math.floor(Math.random() * 20);
         yRand = Math.floor(Math.random() * 20); 
     }
-    console.log(cnt);
     ctx.fillStyle = "red";
     new_sq = ctx.fillRect(xRand * 30, yRand * 30, 30, 30);
     return [xRand, yRand];
